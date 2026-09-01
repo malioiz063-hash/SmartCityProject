@@ -16,7 +16,7 @@ public class EmailUtil {
             "smartcityportal131@gmail.com";
 
     private static final String APP_PASSWORD =
-            "hbrs aggv imvg mytb";
+            "cfwo jvzy clyu eodf";
 
     private static Session getSession() {
 
