@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Citizen Login</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:
+    linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),
+    url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1600');
+
+    background-size:cover;
+    background-position:center;
+}
+
+.login-card{
+
+    width:430px;
+    padding:40px;
+
+    border-radius:25px;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.2);
+
+    box-shadow:0 8px 32px rgba(0,0,0,.3);
+
+    color:white;
+}
+
+.login-card h1{
+    font-size:50px;
+    margin-bottom:10px;
+}
+
+.login-card p{
+    color:#ddd;
+    margin-bottom:25px;
+}
+
+.error-box{
+    background:rgba(255,0,0,.25);
+    color:white;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.form-group{
+    margin-bottom:20px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.form-group input{
+
+    width:100%;
+    padding:15px;
+
+    border:1px solid rgba(255,255,255,.25);
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+
+    outline:none;
+}
+
+.form-group input::placeholder{
+    color:#ddd;
+}
+
+.form-group input:focus{
+    border-color:#4f8cff;
+}
+
+button{
+
+    width:100%;
+    padding:16px;
+
+    border:none;
+    border-radius:15px;
+
+    background:linear-gradient(
+            135deg,
+            #2563eb,
+            #7c3aed
+    );
+
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.bottom-link{
+
+    text-align:center;
+    margin-top:20px;
+
+    color:#ddd;
+}
+
+.bottom-link a{
+
+    color:#4ea1ff;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.bottom-link a:hover{
+    text-decoration:underline;
+}
+
+</style>
+
+<script>
+
+function validateLogin(){
+
+    let valid=true;
+
+    document.getElementById("emailError").innerHTML="";
+    document.getElementById("passwordError").innerHTML="";
+
+    let email=
+    document.getElementById("email").value.trim();
+
+    let password=
+    document.getElementById("password").value.trim();
+
+    let emailPattern=
+    /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+    if(!email.match(emailPattern)){
+
+        document.getElementById(
+                "emailError").innerHTML=
+                "Enter valid email";
+
+        valid=false;
+    }
+
+    if(password.length<8){
+
+        document.getElementById(
+                "passwordError").innerHTML=
+                "Password must be at least 8 characters";
+
+        valid=false;
+    }
+
+    return valid;
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <h1>Welcome Back!</h1>
+
+    <p>Login to your Smart City account</p>
+
+    <form action="LoginServlet"
+          method="post"
+          onsubmit="return validateLogin()">
+
+        <div class="form-group">
+
+            <label>Email</label>
+
+            <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email">
+
+            <div
+                    id="emailError"
+                    style="color:#ff9b9b;margin-top:5px;">
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Password</label>
+
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter password">
+
+            <div
+                    id="passwordError"
+                    style="color:#ff9b9b;margin-top:5px;">
+            </div>
+
+        </div>
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+    <div class="bottom-link">
+
+        Don't have an account?
+
+        <a href="register.html">
+            Register Here
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

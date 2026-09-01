@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Emergency Response Report</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f7fc;
+    min-height:100vh;
+    padding:40px;
+}
+
+.container{
+    max-width:950px;
+    margin:auto;
+    background:white;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.top-bar{
+    margin-bottom:20px;
+}
+
+.back-btn{
+    display:inline-block;
+    padding:12px 22px;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.back-btn:hover{
+    background:#1d4ed8;
+}
+
+h2{
+    text-align:center;
+    color:#111827;
+    font-size:34px;
+    margin-bottom:25px;
+}
+
+.info-box{
+    background:#fef2f2;
+    border-left:5px solid #dc2626;
+    color:#991b1b;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:25px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.full-width{
+    grid-column:1/3;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#374151;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:14px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:15px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:none;
+    border-color:#2563eb;
+}
+
+textarea{
+    resize:none;
+}
+
+#map{
+    height:350px;
+    width:100%;
+    border-radius:15px;
+    overflow:hidden;
+    border:1px solid #d1d5db;
+    margin-top:10px;
+}
+
+.btn{
+    width:100%;
+    padding:15px;
+    margin-top:10px;
+    background:#dc2626;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn:hover{
+    background:#b91c1c;
+}
+
+@media(max-width:768px){
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full-width{
+        grid-column:auto;
+    }
+
+    h2{
+        font-size:28px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+        <a href="CitizenDashboardServlet" class="back-btn">
+            ← Back To Dashboard
+        </a>
+    </div>
+
+    <h2>Emergency Response Report</h2>
+
+    <div class="info-box">
+        Report urgent incidents such as fire emergencies, road accidents,
+        floods, medical emergencies, and public safety concerns.
+    </div>
+
+    <form action="EmergencyReportServlet" method="post">
+
+        <div class="form-grid">
+
+            <div>
+                <label>Your Email</label>
+
+                <input
+                    type="email"
+                    name="citizen_email"
+                    placeholder="Enter your email address"
+                    required>
+            </div>
+
+            <div>
+                <label>Incident Type</label>
+
+                <select name="incident_type" required>
+
+                    <option value="">Select Incident</option>
+                    <option>Fire Incident</option>
+                    <option>Medical Emergency</option>
+                    <option>Road Accident</option>
+                    <option>Flood Report</option>
+                    <option>Public Safety Alert</option>
+
+                </select>
+            </div>
+
+            <div class="full-width">
+
+                <label>Location</label>
+
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="Click map or type location manually"
+                    required>
+
+            </div>
+
+            <div class="full-width">
+                <div id="map"></div>
+            </div>
+
+            <div class="full-width">
+
+                <label>Description</label>
+
+                <textarea
+                    name="description"
+                    rows="6"
+                    placeholder="Describe the emergency situation in detail"
+                    required></textarea>
+
+            </div>
+
+            <div>
+                <label>Severity Level</label>
+
+                <select name="severity">
+
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                    <option>Critical</option>
+
+                </select>
+            </div>
+
+            <div></div>
+
+            <div class="full-width">
+
+                <button type="submit" class="btn">
+                    🚨 Submit Emergency Report
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+
+let map;
+let marker;
+let geocoder;
+
+function initMap() {
+
+    const defaultLocation = {
+        lat: 33.6844,
+        lng: 73.0479
+    };
+
+    geocoder = new google.maps.Geocoder();
+
+    map = new google.maps.Map(
+        document.getElementById("map"),
+        {
+            zoom: 12,
+            center: defaultLocation
+        }
+    );
+
+    marker = new google.maps.Marker({
+        position: defaultLocation,
+        map: map,
+        draggable: true
+    });
+
+    map.addListener("click", function(event){
+
+        marker.setPosition(event.latLng);
+
+        updateLocation(event.latLng);
+
+    });
+
+    marker.addListener("dragend", function(event){
+
+        updateLocation(event.latLng);
+
+    });
+
+}
+
+function updateLocation(latLng){
+
+    geocoder.geocode(
+        {
+            location: latLng
+        },
+        function(results, status){
+
+            if(status === "OK" && results[0]){
+
+                document.getElementById("location").value =
+                        results[0].formatted_address;
+
+            }else{
+
+                document.getElementById("location").value =
+                        latLng.lat().toFixed(6) +
+                        ", " +
+                        latLng.lng().toFixed(6);
+
+            }
+
+        }
+    );
+
+}
+
+</script>
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQSRFDk4L0fPIFvNfbFuyLN1-2-GQrTZc&callback=initMap">
+</script>
+
+</body>
+</html>
