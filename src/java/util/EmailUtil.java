@@ -23,14 +23,9 @@ public class EmailUtil {
         Properties props = new Properties();
 
         props.put("mail.smtp.host", "smtp.gmail.com");
-props.put("mail.smtp.port", "465");
-props.put("mail.smtp.auth", "true");
-props.put("mail.smtp.starttls.enable", "true");
-
-props.put("mail.debug", "true");
-props.put("mail.smtp.connectiontimeout", "5000");
-props.put("mail.smtp.timeout", "5000");
-props.put("mail.smtp.writetimeout", "5000");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
 
         return Session.getInstance(
                 props,
