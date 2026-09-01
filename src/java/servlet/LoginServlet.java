@@ -59,20 +59,24 @@ public class LoginServlet extends HttpServlet {
 
                 // Login Time
                 // Send Login Notification Email in Background
-try {
+CompletableFuture.runAsync(() -> {
+    try {
 
-    System.out.println("STARTING LOGIN EMAIL");
+        System.out.println("LOGIN EMAIL START");
 
-    EmailUtil.sendLoginEmail(email, fullName);
+        EmailUtil.sendLoginEmail(
+                email,
+                fullName);
 
-    System.out.println("LOGIN EMAIL SENT");
+        System.out.println("LOGIN EMAIL SENT");
 
-} catch (Exception e) {
+    } catch (Exception e) {
 
-    System.out.println("LOGIN EMAIL FAILED");
+        System.out.println("LOGIN EMAIL FAILED");
 
-    e.printStackTrace();
-}}
+        e.printStackTrace();
+    }
+});}
             else {
 
                 response.sendRedirect(
