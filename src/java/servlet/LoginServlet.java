@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
+import java.util.concurrent.CompletableFuture;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
@@ -59,21 +59,20 @@ public class LoginServlet extends HttpServlet {
 
                 // Login Time
                 // Send Login Notification Email in Background
-new Thread(() -> {
-    try {
+try {
 
-        System.out.println("EMAIL THREAD STARTED");
+    System.out.println("STARTING LOGIN EMAIL");
 
-        EmailUtil.sendLoginEmail(email, fullName);
+    EmailUtil.sendLoginEmail(email, fullName);
 
-        System.out.println("EMAIL SENT SUCCESSFULLY");
+    System.out.println("LOGIN EMAIL SENT");
 
-    } catch (Exception e) {
+} catch (Exception e) {
 
-        System.out.println("EMAIL ERROR:");
-        e.printStackTrace();
-    }
-}).start();}
+    System.out.println("LOGIN EMAIL FAILED");
+
+    e.printStackTrace();
+}}
             else {
 
                 response.sendRedirect(
