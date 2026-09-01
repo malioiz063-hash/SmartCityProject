@@ -56,37 +56,33 @@ public class LoginServlet extends HttpServlet {
 
                 session.setAttribute("email", email);
                 session.setAttribute("fullName", fullName);
-System.out.println("NEW VERSION DEPLOYED 123");
+
                 // Login Time
-                String loginTime =
-                        LocalDateTime.now().format(
-                                DateTimeFormatter.ofPattern(
-                                        "dd-MM-yyyy hh:mm a"));
+                // Send Login Notification Email in Background
+new Thread(() -> {
+    try {
 
-                // Send Login Notification Email
-//                try {
-//
-////                    EmailUtil.sendLoginEmail(
-////        email,
-////        fullName);
-////
-////                    System.out.println(
-////                            "Login notification email sent to: "
-////                            + email);
-//
-//                } catch (Exception emailError) {
-//
-//                    System.out.println(
-//                            "Login email failed: "
-//                            + emailError.getMessage());
-//
-//                    emailError.printStackTrace();
-//                }
+        EmailUtil.sendLoginEmail(
+                email,
+                fullName);
 
-                // Redirect to Dashboard
-                response.sendRedirect("CitizenDashboardServlet");
+        System.out.println(
+                "Login notification email sent to: "
+                + email);
 
-            } else {
+    } catch (Exception emailError) {
+
+        System.out.println(
+                "Login email failed: "
+                + emailError.getMessage());
+
+        emailError.printStackTrace();
+    }
+}).start();
+
+// Redirect to Dashboard
+response.sendRedirect("CitizenDashboardServlet");}
+            else {
 
                 response.sendRedirect(
                         "login.html?error=Invalid Email or Password");
