@@ -62,26 +62,18 @@ public class LoginServlet extends HttpServlet {
 new Thread(() -> {
     try {
 
-        EmailUtil.sendLoginEmail(
-                email,
-                fullName);
+        System.out.println("EMAIL THREAD STARTED");
 
-        System.out.println(
-                "Login notification email sent to: "
-                + email);
+        EmailUtil.sendLoginEmail(email, fullName);
 
-    } catch (Exception emailError) {
+        System.out.println("EMAIL SENT SUCCESSFULLY");
 
-        System.out.println(
-                "Login email failed: "
-                + emailError.getMessage());
+    } catch (Exception e) {
 
-        emailError.printStackTrace();
+        System.out.println("EMAIL ERROR:");
+        e.printStackTrace();
     }
-}).start();
-
-// Redirect to Dashboard
-response.sendRedirect("CitizenDashboardServlet");}
+}).start();}
             else {
 
                 response.sendRedirect(
