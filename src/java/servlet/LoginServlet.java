@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.concurrent.CompletableFuture;
+
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
@@ -56,28 +56,37 @@ public class LoginServlet extends HttpServlet {
 
                 session.setAttribute("email", email);
                 session.setAttribute("fullName", fullName);
-
+System.out.println("NEW VERSION DEPLOYED 123");
                 // Login Time
-                // Send Login Notification Email in Background
-CompletableFuture.runAsync(() -> {
-    try {
+                String loginTime =
+                        LocalDateTime.now().format(
+                                DateTimeFormatter.ofPattern(
+                                        "dd-MM-yyyy hh:mm a"));
 
-        System.out.println("LOGIN EMAIL START");
+                // Send Login Notification Email
+                try {
 
-        EmailUtil.sendLoginEmail(
-                email,
-                fullName);
+                    EmailUtil.sendLoginEmail(
+        email,
+        fullName);
 
-        System.out.println("LOGIN EMAIL SENT");
+                    System.out.println(
+                            "Login notification email sent to: "
+                            + email);
 
-    } catch (Exception e) {
+                } catch (Exception emailError) {
 
-        System.out.println("LOGIN EMAIL FAILED");
+                    System.out.println(
+                            "Login email failed: "
+                            + emailError.getMessage());
 
-        e.printStackTrace();
-    }
-});}
-            else {
+                    emailError.printStackTrace();
+                }
+
+                // Redirect to Dashboard
+                response.sendRedirect("CitizenDashboardServlet");
+
+            } else {
 
                 response.sendRedirect(
                         "login.html?error=Invalid Email or Password");
