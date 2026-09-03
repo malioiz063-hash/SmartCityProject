@@ -148,11 +148,7 @@ public class ViewComplaintServlet extends HttpServlet {
 
                 out.println("<td>"+rs.getString("priority")+"</td>");
 
-                out.println("<td>"
-                        +(rs.getTimestamp("deadline")==null
-                        ? "-"
-                        : rs.getTimestamp("deadline"))
-                        +"</td>");
+                out.println("<td>-</td>");
 
                 out.println("<td class='"+statusClass+"'>"
                         +status+
@@ -187,9 +183,7 @@ public class ViewComplaintServlet extends HttpServlet {
 
                 out.println("</td>");
 
-                out.println("<td>"
-                        + rs.getTimestamp("created_at")
-                        + "</td>");
+                out.println("<td>-</td>");
 
                 out.println("</tr>");
             }
