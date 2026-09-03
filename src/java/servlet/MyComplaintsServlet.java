@@ -118,7 +118,7 @@ out.println("</style>");
             out.println("<th>Category</th>");
             out.println("<th>Location</th>");
             out.println("<th>Status</th>");
-            out.println("<th>Date</th>");
+            
             out.println("<th>Feedback</th>");
             out.println("</tr>");
 
@@ -152,7 +152,7 @@ out.println("</style>");
                     out.println("<td><span class='resolved'>Resolved</span></td>");
                 }
 
-                out.println("<td>"+rs.getTimestamp("created_at")+"</td>");
+                
 
                 out.println("<td>");
 
