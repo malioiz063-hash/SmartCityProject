@@ -65,19 +65,35 @@ public class EmergencyReportServlet extends HttpServlet {
                 try {
 
                     // Email to Admin
-                    EmailUtil.sendEmergencyAlertToAdmin(
-                            incidentType,
-                            location,
-                            description,
-                            severity
-                    );
+                    Thread adminEmailThread = new Thread(() -> {
+    try {
+        EmailUtil.sendEmergencyAlertToAdmin(
+                incidentType,
+                location,
+                description,
+                severity);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
+
+adminEmailThread.setDaemon(true);
+adminEmailThread.start();
 
                     // Email to Citizen
-                    EmailUtil.sendEmergencyReportSubmittedEmail(
-                            citizenEmail,
-                            incidentType,
-                            location
-                    );
+                    Thread citizenEmailThread = new Thread(() -> {
+    try {
+        EmailUtil.sendEmergencyReportSubmittedEmail(
+                citizenEmail,
+                incidentType,
+                location);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
+
+citizenEmailThread.setDaemon(true);
+citizenEmailThread.start();
 
                     System.out.println(
                             "Admin and citizen emails sent successfully.");

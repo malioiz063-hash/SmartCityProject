@@ -102,24 +102,20 @@ else if(service.equals("Emergency Services")) {
 
             if (rows > 0) {
 
-                try {
+                Thread emailThread = new Thread(() -> {
+    try {
+        EmailUtil.sendServiceRequestEmail(
+            email,
+            service,
+            location
+        );
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
 
-                    EmailUtil.sendServiceRequestEmail(
-                            email,
-                            service,
-                            location);
-
-                    System.out.println(
-                            "Service request email sent.");
-
-                } catch (Exception emailError) {
-
-                    System.out.println(
-                            "Email failed: "
-                            + emailError.getMessage());
-
-                    emailError.printStackTrace();
-                }
+emailThread.setDaemon(true);
+emailThread.start();
 
                 response.sendRedirect(
                         "CitizenDashboardServlet?success=Service Request Submitted");

@@ -53,26 +53,20 @@ public class AppointmentServlet extends HttpServlet {
 
             if (rows > 0) {
 
-                try {
+                Thread emailThread = new Thread(() -> {
+    try {
+        EmailUtil.sendAppointmentEmail(
+                email,
+                department,
+                date,
+                time);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
 
-                    EmailUtil.sendAppointmentEmail(
-                            email,
-                            department,
-                            date,
-                            time);
-
-                    System.out.println(
-                            "Appointment booking email sent.");
-
-                } catch (Exception emailError) {
-
-                    System.out.println(
-                            "Appointment email failed: "
-                            + emailError.getMessage());
-
-                    emailError.printStackTrace();
-                }
-
+emailThread.setDaemon(true);
+emailThread.start();
                 response.sendRedirect(
                         "MyAppointmentsServlet");
 

@@ -116,23 +116,16 @@ ps.setString(9, department);
 
             if (rows > 0) {
 
-                try {
+                Thread emailThread = new Thread(() -> {
+    try {
+        EmailUtil.sendComplaintSubmittedEmail(email, title);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
 
-                    EmailUtil.sendComplaintSubmittedEmail(
-        email,
-        title);
-
-                    System.out.println(
-                            "Complaint submission email sent.");
-
-                } catch (Exception emailError) {
-
-                    System.out.println(
-                            "Complaint email failed: "
-                            + emailError.getMessage());
-
-                    emailError.printStackTrace();
-                }
+emailThread.setDaemon(true);
+emailThread.start();
 
                 response.sendRedirect(
                         "CitizenDashboardServlet?success=Complaint Submitted Successfully");

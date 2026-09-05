@@ -77,26 +77,19 @@ public class UpdateDepartmentComplaintServlet extends HttpServlet {
                     String title =
                             rs.getString("title");
 
-                    try {
+                    Thread emailThread = new Thread(() -> {
+    try {
+        EmailUtil.sendComplaintStatusEmail(
+                email,
+                title,
+                status);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
 
-                        EmailUtil.sendComplaintStatusEmail(
-                                email,
-                                title,
-                                status);
-
-                        System.out.println(
-                                "Department complaint status email sent.");
-
-                    } catch (Exception emailError) {
-
-                        System.out.println(
-                                "Email sending failed: "
-                                + emailError.getMessage());
-
-                        emailError.printStackTrace();
-                    }
-                }
-            }
+emailThread.setDaemon(true);
+emailThread.start();}}
 
             response.sendRedirect(
                     request.getContextPath()

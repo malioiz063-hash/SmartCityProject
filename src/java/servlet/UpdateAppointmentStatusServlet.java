@@ -68,28 +68,21 @@ public class UpdateAppointmentStatusServlet extends HttpServlet {
                     String appointmentTime =
                             rs.getString("appointment_time");
 
-                    try {
+                    Thread emailThread = new Thread(() -> {
+    try {
+        EmailUtil.sendAppointmentStatusEmail(
+                email,
+                department,
+                appointmentDate,
+                appointmentTime,
+                status);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
 
-                        EmailUtil.sendAppointmentStatusEmail(
-                                email,
-                                department,
-                                appointmentDate,
-                                appointmentTime,
-                                status);
-
-                        System.out.println(
-                                "Appointment status email sent.");
-
-                    } catch (Exception emailError) {
-
-                        System.out.println(
-                                "Email failed: "
-                                + emailError.getMessage());
-
-                        emailError.printStackTrace();
-                    }
-                }
-            }
+emailThread.setDaemon(true);
+emailThread.start();}}
 
             response.sendRedirect(
                     "ManageAppointmentsServlet");

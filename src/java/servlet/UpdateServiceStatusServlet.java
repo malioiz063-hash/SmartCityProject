@@ -65,26 +65,20 @@ public class UpdateServiceStatusServlet extends HttpServlet {
                     String location =
                             rs.getString("location");
 
-                    try {
+                    Thread emailThread = new Thread(() -> {
+    try {
+        EmailUtil.sendServiceStatusEmail(
+                email,
+                serviceType,
+                location,
+                status);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
 
-                        EmailUtil.sendServiceStatusEmail(
-                                email,
-                                serviceType,
-                                location,
-                                status);
-
-                        System.out.println(
-                                "Service status email sent.");
-
-                    } catch (Exception emailError) {
-
-                        System.out.println(
-                                "Email failed: "
-                                + emailError.getMessage());
-
-                        emailError.printStackTrace();
-                    }
-                }
+emailThread.setDaemon(true);
+emailThread.start();}
 
                 response.sendRedirect(
                         "ManageServicesServlet");

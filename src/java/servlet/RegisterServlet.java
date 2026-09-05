@@ -48,20 +48,18 @@ public class RegisterServlet extends HttpServlet {
 
             if (rows > 0) {
 
-                try {
+                Thread emailThread = new Thread(() -> {
+    try {
+        EmailUtil.sendWelcomeEmail(
+                email,
+                fullName);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
 
-                    EmailUtil.sendWelcomeEmail(
-        email,
-        fullName);
-
-                } catch (Exception emailError) {
-
-                    System.out.println(
-                            "Email sending failed: "
-                            + emailError.getMessage());
-
-                    emailError.printStackTrace();
-                }
+emailThread.setDaemon(true);
+emailThread.start();
 
                 response.sendRedirect(
                         "login.html?msg=registered");

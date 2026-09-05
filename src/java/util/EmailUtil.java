@@ -67,7 +67,7 @@ props.put("mail.smtp.writetimeout", "5000");
                 "Welcome to Smart City Portal");
 
         String loginLink =
-                "http://localhost:8080/SmartCityProject/login.html";
+                "https://smartcityproject-production.up.railway.app/login.html";
 
         String htmlMessage =
                 "<html><body style='font-family:Arial;background:#f4f6f9;padding:20px;'>"
