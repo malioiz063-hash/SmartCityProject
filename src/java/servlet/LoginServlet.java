@@ -64,13 +64,16 @@ System.out.println("NEW VERSION DEPLOYED 123");
                                         "dd-MM-yyyy hh:mm a"));
 
                 // Send Login Notification Email
-                CompletableFuture.runAsync(() -> {
+                Thread emailThread = new Thread(() -> {
     try {
         EmailUtil.sendLoginEmail(email, fullName);
     } catch (Exception e) {
         e.printStackTrace();
     }
 });
+
+emailThread.setDaemon(true);
+emailThread.start();
 
 response.sendRedirect("CitizenDashboardServlet");} else {
 
