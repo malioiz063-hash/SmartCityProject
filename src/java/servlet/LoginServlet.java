@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
+import java.util.concurrent.CompletableFuture;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
@@ -64,29 +64,15 @@ System.out.println("NEW VERSION DEPLOYED 123");
                                         "dd-MM-yyyy hh:mm a"));
 
                 // Send Login Notification Email
-                try {
+                CompletableFuture.runAsync(() -> {
+    try {
+        EmailUtil.sendLoginEmail(email, fullName);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+});
 
-                    EmailUtil.sendLoginEmail(
-        email,
-        fullName);
-
-                    System.out.println(
-                            "Login notification email sent to: "
-                            + email);
-
-                } catch (Exception emailError) {
-
-                    System.out.println(
-                            "Login email failed: "
-                            + emailError.getMessage());
-
-                    emailError.printStackTrace();
-                }
-
-                // Redirect to Dashboard
-                response.sendRedirect("CitizenDashboardServlet");
-
-            } else {
+response.sendRedirect("CitizenDashboardServlet");} else {
 
                 response.sendRedirect(
                         "login.html?error=Invalid Email or Password");
